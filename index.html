@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Online Learning Platform - CodTech</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Reset and base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #0d1b2a;
+      color: #e0e0e0;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: #66aaff;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Container for main content */
+    .container {
+      flex: 1 0 auto;
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    /* Header */
+    header {
+      background-color: #142d4c;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header h1 {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: #82c0ff;
+      margin: 0;
+    }
+
+    nav {
+      display: flex;
+      gap: 1.2rem;
+    }
+
+    nav a {
+      font-weight: 600;
+      padding: 0.4rem 0.6rem;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    nav a:hover,
+    nav a:focus {
+      background-color: #66aaff;
+      color: #0d1b2a;
+      outline: none;
+    }
+
+    /* Mobile menu button */
+    .mobile-menu-button {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #82c0ff;
+      font-size: 1.5rem;
+    }
+
+    /* Sections styling */
+    section {
+      margin-bottom: 3rem;
+      background-color: #1b355d;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #0f2a5c88;
+    }
+
+    h2 {
+      color: #82c0ff;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      font-size: 1.8rem;
+    }
+
+    /* Login Form */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 400px;
+      margin-top: 1rem;
+    }
+    input[type="email"],
+    input[type="password"],
+    input[type="text"],
+    textarea {
+      padding: 0.8rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      background-color: #254a7b;
+      color: #e0e0e0;
+    }
+    input::placeholder,
+    textarea::placeholder {
+      color: #b0c4de;
+    }
+
+    button {
+      background-color: #4f91f7;
+      border: none;
+      padding: 0.8rem;
+      color: white;
+      font-weight: 700;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: background-color 0.3s ease;
+    }
+    button:hover,
+    button:focus {
+      background-color: #366ed8;
+      outline: none;
+    }
+
+    /* Quiz */
+    #quiz-question {
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    .quiz-feedback {
+      margin-top: 0.5rem;
+      font-weight: 700;
+    }
+    .quiz-feedback.correct {
+      color: #7bed9f;
+    }
+    .quiz-feedback.incorrect {
+      color: #ff6b6b;
+    }
+
+    /* Progress */
+    #progress-display {
+      margin-top: 1rem;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #a0b9f2;
+    }
+
+    /* Video iframe */
+    iframe {
+      width: 100%;
+      height: 360px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #142d4c;
+      color: #82c0ff;
+      text-align: center;
+      padding: 1rem;
+      flex-shrink: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav {
+        display: none;
+      }
+      .mobile-menu-button {
+        display: block;
+      }
+      #mobile-menu.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        background: #142d4c;
+        top: 60px;
+        right: 1rem;
+        border-radius: 5px;
+        box-shadow: 0 4px 10px #0a204a99;
+        z-index: 1500;
+      }
+      #mobile-menu.open a {
+        padding: 0.8rem 1.2rem;
+        border-bottom: 1px solid #0a204a;
+      }
+      #mobile-menu.open a:last-child {
+        border-bottom: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header role="banner">
+  <h1>CodTech</h1>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#login">Login</a>
+    <a href="#video">Video</a>
+    <a href="#quiz">Quiz</a>
+    <a href="#progress">Progress</a>
+    <a href="#help">Help</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <button class="mobile-menu-button" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+  <nav id="mobile-menu" aria-label="Mobile menu" hidden>
+    <a href="#home" tabindex="-1">Home</a>
+    <a href="#login" tabindex="-1">Login</a>
+    <a href="#video" tabindex="-1">Video</a>
+    <a href="#quiz" tabindex="-1">Quiz</a>
+    <a href="#progress" tabindex="-1">Progress</a>
+    <a href="#help" tabindex="-1">Help</a>
+    <a href="#contact" tabindex="-1">Contact</a>
+  </nav>
+</header>
+
+<main class="container" id="main-content" tabindex="-1">
+  <!-- Home -->
+  <section id="home" tabindex="0">
+    <h2>Welcome to CodTech</h2>
+    <p>Learn Python programming through interactive videos, quizzes, and progress tracking. Let's code smarter!</p>
+  </section>
+
+  <!-- Login -->
+  <section id="login" tabindex="0">
+    <h2>Login</h2>
+    <form id="login-form" novalidate>
+      <label for="email">Email:</label>
+      <input type="email" id="email" placeholder="you@example.com" required />
+      <label for="password">Password:</label>
+      <input type="password" id="password" placeholder="Enter password" required />
+      <button type="submit">Log In</button>
+      <p id="login-status" aria-live="polite" style="margin-top:0.5rem;"></p>
+    </form>
+  </section>
+
+  <!-- Video -->
+  <section id="video" tabindex="0">
+    <h2>Learning Video</h2>
+    <iframe
+      src="https://www.youtube.com/embed/rfscVS0vtbw"
+      title="Python Tutorial for Beginners"
+      allowfullscreen
+      loading="lazy"
+    ></iframe>
+  </section>
+
+  <!-- Quiz -->
+  <section id="quiz" tabindex="0">
+    <h2>Quiz Yourself</h2>
+    <p id="quiz-question" aria-live="polite" aria-atomic="true">Loading question...</p>
+    <form id="quiz-form" novalidate>
+      <label for="quiz-answer" class="visually-hidden">Your answer</label>
+      <input type="text" id="quiz-answer" placeholder="Type your answer here" autocomplete="off" required />
+      <button type="submit">Submit Answer</button>
+    </form>
+    <p id="quiz-result" class="quiz-feedback" aria-live="polite"></p>
+  </section>
+
+  <!-- Progress -->
+  <section id="progress" tabindex="0">
+    <h2>Your Progress</h2>
+    <p id="quiz-progress">Question 1 of 8</p>
+    <p id="progress-display">Videos Watched: 0 | Quiz Correct: 0</p>
+  </section>
+
+  <!-- Help -->
+  <section id="help" tabindex="0">
+    <h2>Help & FAQs</h2>
+    <ul>
+      <li><strong>How to watch videos?</strong> Click the play button in the video section.</li>
+      <li><strong>How to submit quiz answers?</strong> Type your answer and click Submit Answer.</li>
+      <li><strong>How is progress tracked?</strong> Progress updates as you watch videos and answer quizzes correctly.</li>
+      <li><strong>Need more help?</strong> Contact us below.</li>
+    </ul>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" tabindex="0">
+    <h2>Contact Us</h2>
+    <form action="mailto:support@codtech.com" method="post" enctype="text/plain" novalidate>
+      <label for="contact-name">Name:</label>
+      <input type="text" id="contact-name" name="name" placeholder="Your full name" required />
+      <label for="contact-email">Email:</label>
+      <input type="email" id="contact-email" name="email" placeholder="you@example.com" required />
+      <label for="contact-message">Message:</label>
+      <textarea id="contact-message" name="message" rows="4" placeholder="Your message here" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </section>
+</main>
+
+<footer role="contentinfo">
+  <p>&copy; 2025 CodTech. All rights reserved.</p>
+</footer>
+
+<script>
+  (() => {
+    "use strict";
+
+    // Elements
+    const mobileMenuButton = document.querySelector(".mobile-menu-button");
+    const mobileNav = document.getElementById("mobile-menu");
+    const loginForm = document.getElementById("login-form");
+    const loginStatus = document.getElementById("login-status");
+    const quizForm = document.getElementById("quiz-form");
+    const quizResult = document.getElementById("quiz-result");
+    const quizQuestionEl = document.getElementById("quiz-question");
+    const quizAnswerInput = document.getElementById("quiz-answer");
+    const quizProgressEl = document.getElementById("quiz-progress");
+    const progressDisplay = document.getElementById("progress-display");
+    const videoEl = document.querySelector("iframe");
+
+    // Quiz questions
+    const quizQuestions = [
+      { question: "What keyword is used to define a function in Python?", answer: "def" },
+      { question: "What symbol is used to comment a single line in Python?", answer: "#" },
+      { question: "What is the data type of the value True?", answer: "bool" },
+      { question: "Which built-in function returns the length of a string or list?", answer: "len" },
+      { question: "What is the result of type(5.0)?", answer: "float" },
+      { question: "Which operator is used for exponentiation in Python?", answer: "**" },
+      { question: "What data structure stores key-value pairs?", answer: "dictionary" },
+      { question: "Which keyword starts a loop that runs while a condition is true?", answer: "while" }
+    ];
+
+    let currentQuestionIndex = 0;
+    let correctAnswers = 0;
+    let videosWatched = 0;
+
+    // Render quiz question
+    function renderQuestion() {
+      if (currentQuestionIndex < quizQuestions.length) {
+        quizQuestionEl.textContent = quizQuestions[currentQuestionIndex].question;
+        quizAnswerInput.value = "";
+        quizResult.textContent = "";
+        quizForm.querySelector("button").disabled = false;
+        quizAnswerInput.disabled = false;
+      } else {
+        quizQuestionEl.textContent = "Quiz completed! Well done.";
+        quizForm.querySelector("button").disabled = true;
+        quizAnswerInput.disabled = true;
+        quizResult.textContent = "";
+      }
+      updateProgress();
+    }
+
+    // Update progress display
+    function updateProgress() {
+      quizProgressEl.textContent = `Question ${Math.min(currentQuestionIndex + 1, quizQuestions.length)} of ${quizQuestions.length}`;
+      progressDisplay.textContent = `Videos Watched: ${videosWatched} | Quiz Correct: ${correctAnswers}`;
+    }
+
+    // Quiz form submit handler
+    quizForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const userAnswer = quizAnswerInput.value.trim().toLowerCase();
+      const correctAnswer = quizQuestions[currentQuestionIndex].answer.toLowerCase();
+      if (userAnswer === correctAnswer) {
+        quizResult.textContent = "Correct!";
+        quizResult.className = "quiz-feedback correct";
+        correctAnswers++;
+      } else {
+        quizResult.textContent = `Incorrect! Correct answer: ${quizQuestions[currentQuestionIndex].answer}`;
+        quizResult.className = "quiz-feedback incorrect";
+      }
+      currentQuestionIndex++;
+      setTimeout(renderQuestion, 1200);
+    });
+
+    // Login form simulation
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      loginStatus.textContent = (email && password) ? "Login successful!" : "Please enter valid credentials.";
+    });
+
+    // Video watch tracker (mock simulation)
+    videoEl.addEventListener("load", () => {
+      videosWatched = 1;
+      updateProgress();
+    });
+
+    // Mobile menu toggle
+    mobileMenuButton.addEventListener("click", () => {
+      const isOpen = mobileNav.classList.toggle("open");
+      mobileMenuButton.setAttribute("aria-expanded", isOpen);
+      mobileNav.hidden = !isOpen;
+      mobileNav.querySelectorAll("a").forEach(a => a.setAttribute("tabindex", isOpen ? "0" : "-1"));
+    });
+
+    // Initialize quiz
+    renderQuestion();
+
+  })();
+</script>
+
+</body>
+</html>
